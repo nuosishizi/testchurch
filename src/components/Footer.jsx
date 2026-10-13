@@ -14,7 +14,6 @@ export default function Footer() {
         <div className="footer__brand">
           <Logo light />
           <p className="footer__tagline">{CHURCH.tagline}</p>
-          <p className="footer__tagline-zh">{CHURCH.taglineZh}</p>
           <p className="footer__about">
             A Christian church devoted to worshiping the one true God, following Jesus Christ, and living according to God’s Word.
           </p>
