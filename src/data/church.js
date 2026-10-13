@@ -10,7 +10,6 @@ export const CHURCH = {
   name: 'The Church of the True Light',
   shortName: 'True Light',
   tagline: 'Know God. Follow Christ. Shine His Light.',
-  taglineZh: '认识神 · 跟随基督 · 活出真光',
   heroScripture: {
     text: 'You are the light of the world. A city that is set on a hill cannot be hid.',
     ref: 'Matthew 5:14',
