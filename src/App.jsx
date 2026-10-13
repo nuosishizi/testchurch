@@ -1,155 +1,95 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
-import RegisterPage from './pages/RegisterPage';
-import ThankYouPage from './pages/ThankYouPage';
-import TopicsPage from './pages/TopicsPage';
-import ArticleDetailPage from './pages/ArticleDetailPage';
 import AboutPage from './pages/AboutPage';
+import BeliefsPage from './pages/BeliefsPage';
+import GodsWordPage from './pages/GodsWordPage';
+import ArticleDetailPage from './pages/ArticleDetailPage';
+import ReturnPage from './pages/ReturnPage';
+import BibleStudyPage from './pages/BibleStudyPage';
+import MembershipPage from './pages/MembershipPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
+import ThankYouPage from './pages/ThankYouPage';
 import AdminPage from './pages/AdminPage';
-import { BIBLE_TOPICS } from './data/topics';
-import { MessageCircle } from 'lucide-react';
+import { ARTICLES } from './data/articles';
+import { CHURCH } from './data/church';
 import './App.css';
 
+const TITLES = {
+  home: `${CHURCH.name} | ${CHURCH.tagline}`,
+  about: 'About Us',
+  beliefs: 'Our Beliefs',
+  word: 'God’s Word — Bible Teachings',
+  return: 'The Return of Christ',
+  'bible-study': 'Free Online Bible Study',
+  membership: 'Membership',
+  contact: 'Contact Us',
+  privacy: 'Privacy Policy',
+  'thank-you': 'Thank You',
+  admin: 'Staff Portal',
+};
+
+/** Parse the URL hash into { route, article }. Unknown routes fall back to home. */
+function parseHash() {
+  const hash = decodeURIComponent(window.location.hash.replace(/^#\/?/, '')) || 'home';
+  if (hash.startsWith('article-')) {
+    const article = ARTICLES.find((a) => a.slug === hash.slice(8));
+    if (article) return { route: 'article', article };
+  }
+  return { route: TITLES[hash] ? hash : 'home', article: null };
+}
+
 export default function App() {
-  const [currentRoute, setCurrentRoute] = useState('home');
-  const [currentArticle, setCurrentArticle] = useState(BIBLE_TOPICS[0]);
+  const [state, setState] = useState(parseHash);
   const [recentLead, setRecentLead] = useState(null);
 
-  // Sync route with browser hash for easy navigation
   useEffect(() => {
-    const handleHash = () => {
-      const hash = window.location.hash.replace('#', '') || 'home';
-      if (hash.startsWith('article-')) {
-        const slug = hash.replace('article-', '');
-        const found = BIBLE_TOPICS.find(a => a.slug === slug || a.id === slug);
-        if (found) {
-          setCurrentArticle(found);
-          setCurrentRoute('article');
-          return;
-        }
-      }
-      setCurrentRoute(hash);
+    const onHash = () => {
+      setState(parseHash());
+      window.scrollTo({ top: 0, behavior: 'instant' });
     };
-
-    window.addEventListener('hashchange', handleHash);
-    handleHash();
-    return () => window.removeEventListener('hashchange', handleHash);
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
-  const navigateTo = (route, param = null) => {
-    if (route === 'article' && param) {
-      setCurrentArticle(param);
-      window.location.hash = `article-${param.slug}`;
-    } else {
-      window.location.hash = route;
-    }
-    setCurrentRoute(route);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const { route, article } = state;
+
+  useEffect(() => {
+    const t = route === 'article' ? article.title : TITLES[route];
+    document.title = route === 'home' ? t : `${t} | ${CHURCH.name}`;
+  }, [route, article]);
+
+  const handleSuccess = (lead) => {
+    setRecentLead(lead);
+    window.location.hash = 'thank-you';
   };
 
-  const handleSelectArticle = (article) => {
-    setCurrentArticle(article);
-    navigateTo('article', article);
-  };
+  if (route === 'admin') return <AdminPage />;
 
-  const handleRegistrationSuccess = (newLead) => {
-    setRecentLead(newLead);
-    navigateTo('thank-you');
+  const pages = {
+    home: <HomePage />,
+    about: <AboutPage />,
+    beliefs: <BeliefsPage />,
+    word: <GodsWordPage />,
+    article: article && <ArticleDetailPage article={article} />,
+    return: <ReturnPage />,
+    'bible-study': <BibleStudyPage onSuccess={handleSuccess} />,
+    membership: <MembershipPage />,
+    contact: <ContactPage onSuccess={handleSuccess} />,
+    privacy: <PrivacyPage />,
+    'thank-you': <ThankYouPage lead={recentLead} />,
   };
 
   return (
-    <div className="app-shell">
-      {/* Show Navbar on all public pages */}
-      {currentRoute !== 'admin' && (
-        <Navbar currentRoute={currentRoute} navigateTo={navigateTo} />
-      )}
-
-      {/* Main Page Content Router */}
-      <main className="main-content-area">
-        {currentRoute === 'home' && (
-          <HomePage 
-            navigateTo={navigateTo} 
-            onSelectArticle={handleSelectArticle} 
-          />
-        )}
-
-        {currentRoute === 'register' && (
-          <RegisterPage 
-            onRegistrationSuccess={handleRegistrationSuccess} 
-          />
-        )}
-
-        {currentRoute === 'thank-you' && (
-          <ThankYouPage 
-            lead={recentLead} 
-            navigateTo={navigateTo} 
-          />
-        )}
-
-        {currentRoute === 'topics' && (
-          <TopicsPage 
-            onSelectArticle={handleSelectArticle} 
-            navigateTo={navigateTo} 
-          />
-        )}
-
-        {currentRoute === 'article' && (
-          <ArticleDetailPage 
-            article={currentArticle} 
-            navigateTo={navigateTo} 
-            onSelectArticle={handleSelectArticle} 
-          />
-        )}
-
-        {currentRoute === 'about' && (
-          <AboutPage 
-            navigateTo={navigateTo} 
-          />
-        )}
-
-        {currentRoute === 'contact' && (
-          <ContactPage 
-            navigateTo={navigateTo} 
-          />
-        )}
-
-        {currentRoute === 'privacy' && (
-          <PrivacyPage 
-            navigateTo={navigateTo} 
-          />
-        )}
-
-        {currentRoute === 'admin' && (
-          <AdminPage 
-            navigateTo={navigateTo} 
-          />
-        )}
+    <div className="app">
+      <a href="#main" className="skip-link" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a>
+      <Navbar currentRoute={route} transparentTop />
+      <main id="main" tabIndex={-1} key={route + (article?.slug || '')} className="page-enter">
+        {pages[route]}
       </main>
-
-      {/* Show Footer on public pages */}
-      {currentRoute !== 'admin' && (
-        <Footer navigateTo={navigateTo} />
-      )}
-
-      {/* Floating Instant WhatsApp Help Bubble (Only on public pages) */}
-      {currentRoute !== 'admin' && (
-        <a
-          href="https://wa.me/14155550199?text=Hello!%20I'm%20visiting%20your%20website%20and%20have%20a%20question%20about%20the%20free%20online%20Bible%20study."
-          target="_blank"
-          rel="noopener noreferrer"
-          className="floating-whatsapp-bubble"
-          title="Chat directly on WhatsApp"
-        >
-          <div className="wa-bubble-inner">
-            <MessageCircle size={26} />
-            <span className="wa-tooltip">Questions? Chat on WhatsApp</span>
-          </div>
-        </a>
-      )}
+      {route !== 'thank-you' && <Footer />}
     </div>
   );
 }

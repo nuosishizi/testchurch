@@ -1,114 +1,64 @@
-import React from 'react';
-import { BookOpen, Mail, MessageCircle, Shield, Heart, ExternalLink, Calendar } from 'lucide-react';
+import { Mail, MessageCircle, MapPin, ArrowUpRight } from 'lucide-react';
+import { Logo } from './ui';
+import { CHURCH, whatsappLink } from '../data/church';
 
-export default function Footer({ navigateTo }) {
+const YEAR = new Date().getFullYear();
+
+export default function Footer() {
+  const wa = whatsappLink('Hello! I visited The Church of the True Light website and have a question.');
+
   return (
-    <footer className="site-footer">
-      <div className="container footer-container">
-        {/* Brand & Mission Column */}
-        <div className="footer-col brand-col">
-          <div className="footer-logo" onClick={() => navigateTo('home')}>
-            <div className="footer-logo-icon">
-              <BookOpen size={22} />
-            </div>
-            <div>
-              <span className="footer-brand-title">Grace & Truth</span>
-              <span className="footer-brand-sub">Online Bible Study</span>
-            </div>
-          </div>
-          <p className="footer-mission-text">
-            A non-profit Christian learning fellowship dedicated to sharing the timeless truth of Scripture. We offer 100% free, interactive online Bible studies for seekers and believers worldwide.
-          </p>
-          <div className="faith-badge">
-            <Heart size={14} className="faith-heart" />
-            <span>Founded on Biblical Grace · Christ-Centered · Independent Non-Profit</span>
-          </div>
-        </div>
-
-        {/* Quick Links */}
-        <div className="footer-col">
-          <h4 className="footer-heading">Explore</h4>
-          <ul className="footer-links">
-            <li><button onClick={() => navigateTo('home')}>Home</button></li>
-            <li><button onClick={() => navigateTo('register')}>Free Bible Study</button></li>
-            <li><button onClick={() => navigateTo('topics')}>Bible Topics & Articles</button></li>
-            <li><button onClick={() => navigateTo('about')}>Statement of Faith</button></li>
-            <li><button onClick={() => navigateTo('contact')}>Contact & Questions</button></li>
-          </ul>
-        </div>
-
-        {/* Study Times & Platforms */}
-        <div className="footer-col">
-          <h4 className="footer-heading">Study Schedule</h4>
-          <div className="schedule-item">
-            <Calendar size={14} />
-            <div>
-              <strong>Weekday Evenings</strong>
-              <p>Tuesdays & Thursdays · 7:30 PM EST</p>
-            </div>
-          </div>
-          <div className="schedule-item">
-            <Calendar size={14} />
-            <div>
-              <strong>Weekend Morning</strong>
-              <p>Saturdays · 10:00 AM EST</p>
-            </div>
-          </div>
-          <p className="meeting-note">
-            Held live via secure Zoom & Google Meet. Video is optional; listen or participate at your comfort.
+    <footer className="footer">
+      <div className="footer__rays" aria-hidden="true" />
+      <div className="container footer__grid">
+        <div className="footer__brand">
+          <Logo light />
+          <p className="footer__tagline">{CHURCH.tagline}</p>
+          <p className="footer__tagline-zh">{CHURCH.taglineZh}</p>
+          <p className="footer__about">
+            A Christian church devoted to worshiping the one true God, following Jesus Christ, and living according to God’s Word.
           </p>
         </div>
 
-        {/* Direct Contact & Support */}
-        <div className="footer-col">
-          <h4 className="footer-heading">Direct Contact</h4>
-          <p className="footer-contact-desc">
-            Have questions before joining? Our team is happy to chat.
-          </p>
-          <div className="footer-contact-actions">
-            <a 
-              href="https://wa.me/14155550199?text=Hello!%20I%20have%20a%20question%20about%20your%20free%20online%20Bible%20study."
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="footer-whatsapp-btn"
-            >
-              <MessageCircle size={16} />
-              <span>WhatsApp: +1 (415) 555-0199</span>
+        <div className="footer__col">
+          <h4>Explore</h4>
+          <a href="#about">About Us</a>
+          <a href="#beliefs">Our Beliefs</a>
+          <a href="#word">God’s Word</a>
+          <a href="#return">The Return of Christ</a>
+        </div>
+
+        <div className="footer__col">
+          <h4>Get Involved</h4>
+          <a href="#bible-study">Free Bible Study</a>
+          <a href="#membership">Membership</a>
+          <a href="#contact">Prayer Requests</a>
+          <a href="#contact">Contact Us</a>
+        </div>
+
+        <div className="footer__col">
+          <h4>Connect</h4>
+          {CHURCH.contact.email && (
+            <a href={`mailto:${CHURCH.contact.email}`} className="footer__contact">
+              <Mail size={16} /> {CHURCH.contact.email}
             </a>
-            <a 
-              href="mailto:study@graceandtruthbiblestudy.org"
-              className="footer-email-link"
-            >
-              <Mail size={16} />
-              <span>study@graceandtruthbiblestudy.org</span>
+          )}
+          {wa && (
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="footer__contact">
+              <MessageCircle size={16} /> WhatsApp <ArrowUpRight size={14} />
             </a>
-          </div>
-
-          <div className="footer-admin-link-box">
-            <button 
-              onClick={() => navigateTo('admin')}
-              className="footer-staff-link"
-            >
-              <Shield size={14} />
-              <span>Staff CRM & Lead Dashboard</span>
-            </button>
-          </div>
+          )}
+          <span className="footer__contact">
+            <MapPin size={16} /> {CHURCH.contact.address || 'Online gatherings worldwide'}
+          </span>
         </div>
       </div>
 
-      {/* Bottom Legal Bar */}
-      <div className="footer-bottom">
-        <div className="container bottom-container">
-          <p className="copyright-text">
-            © 2026 Grace & Truth Online Bible Study. All rights reserved. Biblical quotations from ESV / NIV.
-          </p>
-          <div className="legal-links">
-            <button onClick={() => navigateTo('privacy')}>Privacy Policy</button>
-            <span className="dot">·</span>
-            <button onClick={() => navigateTo('about')}>About Our Mission</button>
-            <span className="dot">·</span>
-            <button onClick={() => navigateTo('contact')}>Report an Issue</button>
-          </div>
+      <div className="container footer__bottom">
+        <span>© {YEAR} {CHURCH.name}. All rights reserved.</span>
+        <div className="footer__legal">
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#membership">Church Governance</a>
         </div>
       </div>
     </footer>

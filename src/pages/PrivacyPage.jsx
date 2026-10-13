@@ -1,87 +1,31 @@
-import React from 'react';
-import { ShieldCheck, Lock, EyeOff, FileText, CheckCircle2 } from 'lucide-react';
+import { PageHero } from '../components/ui';
+import { CHURCH } from '../data/church';
 
-export default function PrivacyPage({ navigateTo }) {
+const LAST_UPDATED = 'October 2026';
+
+export default function PrivacyPage() {
   return (
-    <div className="privacy-page">
-      <div className="container privacy-container">
-        <div className="privacy-header text-center">
-          <div className="badge-pill sage-pill">
-            <ShieldCheck size={14} />
-            <span>Data Privacy & Security</span>
-          </div>
-          <h1>Privacy Policy</h1>
-          <p className="privacy-effective-date">Last Updated: October 2026</p>
+    <div>
+      <PageHero eyebrow="Legal" title="Privacy Policy" subtitle="How we collect, use, and protect your information." image="images/bible-light.jpg" />
+      <section className="section">
+        <div className="container narrow prose prose--legal">
+          <p><em>Last updated: {LAST_UPDATED}</em></p>
+          <h2>1. Information We Collect</h2>
+          <p>When you register for a Bible study or send us a message, we collect only what you choose to provide — such as your name, country, contact details, preferred study time, topics of interest, and your message.</p>
+          <h2>2. How We Use It</h2>
+          <p>We use your information solely to arrange Bible studies, respond to your questions or prayer requests, and send study details you have asked for. We will never add you to group chats or mailing lists without your explicit consent.</p>
+          <h2>3. Sharing</h2>
+          <p>{CHURCH.name} does not sell, rent, or trade your personal information. It is accessible only to authorized church volunteers who help coordinate studies and replies.</p>
+          <h2>4. Your Choices</h2>
+          <p>Participation is entirely voluntary. You may ask us to stop contacting you, or to correct or delete your information, at any time by contacting us at <a href={`mailto:${CHURCH.contact.email}`}>{CHURCH.contact.email}</a>.</p>
+          <h2>5. Minors</h2>
+          <p>Children and teenagers under 18 are welcome to attend gatherings. We encourage parents or guardians to be involved when a minor contacts us.</p>
+          <h2>6. Security</h2>
+          <p>We take reasonable measures to protect the information you share with us. No online transmission is completely secure, so please avoid sending highly sensitive information through web forms.</p>
+          <h2>7. Contact</h2>
+          <p>Questions about this policy may be sent to <a href={`mailto:${CHURCH.contact.email}`}>{CHURCH.contact.email}</a>.</p>
         </div>
-
-        <div className="privacy-content-card">
-          <section className="privacy-section">
-            <h2>1. Our Commitment to Your Privacy</h2>
-            <p>
-              Grace & Truth Online Bible Study ("we", "us", or "our") is dedicated to protecting your personal information and respecting your privacy. As a Christian non-profit educational ministry, we hold all communication and registrations in the highest confidence.
-            </p>
-            <p>
-              <strong>We do not sell, rent, or trade your personal information</strong> with any commercial entities or third-party advertisers.
-            </p>
-          </section>
-
-          <section className="privacy-section">
-            <h2>2. Information We Collect</h2>
-            <p>When you register for our free online Bible study or contact us, we may collect:</p>
-            <ul>
-              <li><strong>Contact Information:</strong> Your name, country/region, and your chosen contact method (WhatsApp phone number or email address).</li>
-              <li><strong>Study Preferences:</strong> Preferred meeting time slots and biblical topics of interest.</li>
-              <li><strong>Communication Records:</strong> Notes from coordinator interactions to assist you in joining the right Zoom study group.</li>
-              <li><strong>Anonymous Technical Data:</strong> Standard server logs, referral sources (e.g. Google Ad Grants, YouTube, or direct links) to assess outreach effectiveness.</li>
-            </ul>
-          </section>
-
-          <section className="privacy-section">
-            <h2>3. How We Use Your Information</h2>
-            <p>Your information is used strictly for the following purposes:</p>
-            <ul>
-              <li>To provide you with the private Zoom / Google Meet meeting links and study syllabus.</li>
-              <li>To communicate with you regarding schedule updates and study reminders.</li>
-              <li>To address your spiritual questions or prayer requests when requested.</li>
-              <li>To maintain compliance with non-profit donor and grant accountability guidelines.</li>
-            </ul>
-          </section>
-
-          <section className="privacy-section">
-            <h2>4. Religious Privacy & Google Ad Grants Compliance</h2>
-            <p>
-              We strictly adhere to sensitive data protection policies. We do not transmit personally identifiable information (PII) or inferences about religious affiliations to third-party advertising platforms. All conversion events tracked for grant compliance are aggregated and anonymized.
-            </p>
-          </section>
-
-          <section className="privacy-section">
-            <h2>5. Your Rights & Data Deletion</h2>
-            <p>
-              Participation in our Bible studies is 100% voluntary. You have the right at any time to:
-            </p>
-            <ul>
-              <li>Request a copy of the data we hold regarding your registration.</li>
-              <li>Ask us to update or correct your contact details.</li>
-              <li>Request complete and immediate deletion of your record from our database.</li>
-            </ul>
-            <p>
-              To request data removal, simply email us at <a href="mailto:privacy@graceandtruthbiblestudy.org">privacy@graceandtruthbiblestudy.org</a> or message our coordinator on WhatsApp, and your record will be removed within 24 hours.
-            </p>
-          </section>
-
-          <section className="privacy-section">
-            <h2>6. Contact Us</h2>
-            <p>
-              If you have any questions about this Privacy Policy or our practices, please contact our ministry team:
-            </p>
-            <p>
-              Email: <strong>privacy@graceandtruthbiblestudy.org</strong><br />
-              WhatsApp: <strong>+1 (415) 555-0199</strong><br />
-              Grace & Truth Online Bible Study Fellowship
-            </p>
-          </section>
-        </div>
-      </div>
+      </section>
     </div>
   );
 }

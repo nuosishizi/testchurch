@@ -1,117 +1,98 @@
+/* ==========================================================================
+   The Church of the True Light — Design System
+   Palette: deep navy · warm gold · ivory · sage (per brand plan)
+   ========================================================================== */
 :root {
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-display: 'Cinzel', serif;
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Brand colors */
+  --navy-950: #08151F;
+  --navy-900: #0E2233;
+  --navy-800: #173348;
+  --navy-700: #22465F;
+  --navy-600: #33607D;
+  --gold-300: #F6E3B4;
+  --gold-400: #E3C47C;
+  --gold-500: #C7A76B;
+  --gold-600: #A88848;
+  --ivory-50: #FDFBF6;
+  --ivory-100: #FAF7F0;
+  --ivory-200: #F1EBDD;
+  --ivory-300: #E4DAC4;
+  --sage-400: #93A596;
+  --sage-500: #758979;
+  --sage-600: #5C6F60;
+  --ink-900: #1A2229;
+  --ink-700: #3D4851;
+  --ink-500: #6B7680;
+  --white: #FFFFFF;
 
-  /* Palette: Warm Cream & Sage Forest */
-  --bg-primary: #FAF8F5;
-  --bg-secondary: #F4EFEA;
-  --bg-surface: #FFFFFF;
-  --bg-subtle: #F0ECE4;
-  --bg-dark: #121A1F;
-  --bg-dark-surface: #1B252C;
+  /* Typography */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-brand: 'Cinzel', 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  --text-primary: #15222B;
-  --text-secondary: #485966;
-  --text-muted: #7A8B97;
-  --text-inverse: #FFFFFF;
-
-  --primary: #23533F;
-  --primary-hover: #1A3F30;
-  --primary-light: #EAF3EF;
-  --primary-border: #BCD5C9;
-
-  --accent-gold: #BD8B35;
-  --accent-gold-hover: #A7792B;
-  --accent-gold-light: #FBF4E8;
-  --accent-gold-border: #E8D3B0;
-
-  --border-subtle: #E7E2D8;
-  --border-light: #F0EBE2;
-
+  /* Layout */
+  --container: 1200px;
   --radius-sm: 8px;
   --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-full: 9999px;
+  --radius-lg: 22px;
+  --radius-xl: 32px;
+  --nav-h: 82px;
 
-  --shadow-sm: 0 2px 8px rgba(21, 34, 43, 0.04);
-  --shadow-md: 0 8px 24px rgba(21, 34, 43, 0.08);
-  --shadow-lg: 0 16px 40px rgba(21, 34, 43, 0.12);
-  --shadow-gold: 0 8px 20px rgba(189, 139, 53, 0.2);
-  --shadow-green: 0 8px 24px rgba(35, 83, 63, 0.25);
-
-  --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-smooth: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Effects */
+  --shadow-sm: 0 2px 8px rgba(14, 34, 51, 0.06);
+  --shadow-md: 0 12px 32px -12px rgba(14, 34, 51, 0.18);
+  --shadow-lg: 0 30px 60px -24px rgba(14, 34, 51, 0.32);
+  --shadow-gold: 0 12px 34px -10px rgba(199, 167, 107, 0.55);
+  --grad-gold: linear-gradient(135deg, #F6E3B4 0%, #E3C47C 40%, #C7A76B 100%);
+  --grad-navy: linear-gradient(160deg, #173348 0%, #0E2233 60%, #08151F 100%);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*,
+*::before,
+*::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-  font-family: var(--font-sans);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 body {
-  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-700);
+  background: var(--ivory-100);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-serif);
-  color: var(--text-primary);
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, select, textarea { font: inherit; color: inherit; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--navy-900);
+  line-height: 1.15;
   font-weight: 600;
-  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+::selection { background: var(--gold-400); color: var(--navy-900); }
 
-button, input, select, textarea {
-  font-family: inherit;
-}
+:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 3px; border-radius: 4px; }
 
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--ivory-200); }
+::-webkit-scrollbar-thumb { background: var(--navy-700); border-radius: 10px; border: 2px solid var(--ivory-200); }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-}
-::-webkit-scrollbar-thumb {
-  background: #D8D2C6;
-  border-radius: var(--radius-full);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #BFB8AA;
-}
-
-/* Container Utility */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-@media (max-width: 640px) {
-  .container {
-    padding: 0 16px;
+@media (prefers-reduced-motion: reduce) {
+  /* Run each animation once, instantly, so infinite loops can't flicker. */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
+  html { scroll-behavior: auto; }
 }

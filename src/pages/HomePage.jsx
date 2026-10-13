@@ -1,365 +1,219 @@
-import React from 'react';
-import { 
-  ArrowRight, 
-  CheckCircle2, 
-  BookOpen, 
-  Users, 
-  HelpCircle, 
-  Sparkles, 
-  Clock, 
-  ShieldCheck, 
-  Video, 
-  Calendar,
-  MessageCircle,
-  Quote
-} from 'lucide-react';
-import VideoSection from '../components/VideoSection';
-import { BIBLE_TOPICS } from '../data/topics';
+import { ArrowRight, ChevronDown, BookOpen, Cross, Sun, Check } from 'lucide-react';
+import { Reveal, SectionHeading, CtaBand, Icon, LogoMark } from '../components/ui';
+import { asset } from '../utils/asset';
+import ArticleCard from '../components/ArticleCard';
+import { CHURCH } from '../data/church';
+import { AIMS, BELIEFS, ACTIVITIES, WELCOME_INTRO } from '../data/content';
+import { ARTICLES } from '../data/articles';
 
-export default function HomePage({ navigateTo, onSelectArticle }) {
-  const featuredTopics = BIBLE_TOPICS.slice(0, 6);
+const PILLARS = [
+  { icon: BookOpen, title: 'Know God', text: 'Discover the one true God who created the heavens, the earth, and all things.' },
+  { icon: Cross, title: 'Follow Christ', text: 'Christ is the way, the truth, and the life — His words guide all we do.' },
+  { icon: Sun, title: 'Shine His Light', text: 'Live as the light of the world and the salt of the earth, to God’s glory.' },
+];
 
+export default function HomePage() {
   return (
-    <div className="home-page">
-      {/* Hero Section */}
-      <section className="hero-section">
-        <div className="container hero-container">
-          {/* Left Column: Headlines & CTAs */}
-          <div className="hero-content">
-            <div className="badge-pill sage-pill">
-              <Sparkles size={14} />
-              <span>100% Free · Live Online · Everyone Welcome</span>
-            </div>
+    <div className="home">
+      {/* ================= HERO ================= */}
+      <section className="hero" id="top">
+        <div className="hero__bg" style={{ backgroundImage: `url(${asset('images/hero-sunrise.jpg')})` }} />
+        <div className="hero__overlay" />
+        <div className="hero__rays" aria-hidden="true" />
+        <div className="hero__particles" aria-hidden="true">
+          {Array.from({ length: 18 }).map((_, i) => (
+            <span key={i} style={{ '--i': i, left: `${(i * 53) % 100}%`, animationDelay: `${(i * 0.7) % 9}s` }} />
+          ))}
+        </div>
 
-            <h1 className="hero-title">
-              Grow in Faith. <br />
-              <span className="gold-text">Discover God's Word.</span>
-            </h1>
-
-            <p className="hero-subtitle">
-              Join our free online Bible study, explore Scripture with caring guides, ask honest questions without judgment, and grow in your personal walk with Christ.
-            </p>
-
-            <div className="hero-actions">
-              <button 
-                onClick={() => navigateTo('register')}
-                className="btn-hero-primary"
-              >
-                <span>Join Free Bible Study</span>
-                <ArrowRight size={18} />
-              </button>
-
-              <button 
-                onClick={() => navigateTo('topics')}
-                className="btn-hero-secondary"
-              >
-                <BookOpen size={18} />
-                <span>Explore Bible Topics</span>
-              </button>
-            </div>
-
-            {/* Trust Highlights */}
-            <div className="hero-trust-list">
-              <div className="trust-item">
-                <CheckCircle2 size={16} className="trust-icon" />
-                <span>No tuition or hidden fees</span>
-              </div>
-              <div className="trust-item">
-                <CheckCircle2 size={16} className="trust-icon" />
-                <span>Beginners completely welcome</span>
-              </div>
-              <div className="trust-item">
-                <CheckCircle2 size={16} className="trust-icon" />
-                <span>Interactive live Zoom groups</span>
-              </div>
-            </div>
+        <div className="container hero__content">
+          <span className="hero__eyebrow">
+            <span className="hero__eyebrow-line" /> Welcome to {CHURCH.name}
+          </span>
+          <h1 className="hero__title">
+            Walk in the Light <br />
+            <span className="text-gold">of God’s Word</span>
+          </h1>
+          <p className="hero__tagline">{CHURCH.tagline}</p>
+          <p className="hero__lead">
+            A community devoted to knowing God, worshiping Him with one heart and one mind, and sharing His gospel with the world.
+          </p>
+          <div className="btn-row">
+            <a href="#bible-study" id="hero-cta-study" className="btn btn-gold btn-lg">
+              Join a Free Bible Study <ArrowRight size={20} />
+            </a>
+            <a href="#beliefs" id="hero-cta-beliefs" className="btn btn-ghost-light btn-lg">
+              Discover Our Beliefs
+            </a>
           </div>
+          <ul className="hero__assurances">
+            <li><Check size={16} /> Free to join</li>
+            <li><Check size={16} /> Online</li>
+            <li><Check size={16} /> Everyone welcome</li>
+          </ul>
+        </div>
 
-          {/* Right Column: Visual Showcase */}
-          <div className="hero-visual">
-            <div className="hero-image-wrapper">
-              <img 
-                src={`${import.meta.env.BASE_URL}hero-bible-study.jpg`} 
-                alt="Believers gathered in warm online Bible study with open Bible" 
-                className="hero-main-img"
-              />
-              <div className="hero-floating-card top-float">
-                <div className="float-icon-box">
-                  <Video size={18} />
-                </div>
-                <div>
-                  <span className="float-label">Weekly Live Sessions</span>
-                  <span className="float-value">Small Groups via Zoom</span>
-                </div>
-              </div>
+        <a href="#home-pillars" className="hero__scroll" aria-label="Scroll down" onClick={(e) => { e.preventDefault(); document.getElementById('home-pillars')?.scrollIntoView({ behavior: 'smooth' }); }}>
+          <ChevronDown size={22} />
+        </a>
+      </section>
 
-              <div className="hero-floating-card bottom-float">
-                <div className="float-icon-box gold-icon">
-                  <Users size={18} />
-                </div>
-                <div>
-                  <span className="float-label">Global Fellowship</span>
-                  <span className="float-value">US, Canada & Worldwide</span>
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* ================= PILLARS ================= */}
+      <section className="pillars" id="home-pillars">
+        <div className="container pillars__grid">
+          {PILLARS.map((p, i) => (
+            <Reveal key={p.title} delay={i * 120} className="pillar">
+              <div className="pillar__icon"><p.icon size={26} strokeWidth={1.6} /></div>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </Reveal>
+          ))}
         </div>
       </section>
 
-      {/* CHURCH YOUTUBE VIDEO SECTION */}
-      <VideoSection onJoinStudy={() => navigateTo('register')} />
-
-      {/* WHY JOIN SECTION */}
-      <section className="why-join-section">
-        <div className="container">
-          <div className="section-head text-center">
-            <div className="badge-pill sage-pill">
-              <BookOpen size={14} />
-              <span>Why Study With Us</span>
+      {/* ================= WELCOME ================= */}
+      <section className="section">
+        <div className="container split">
+          <Reveal className="split__media">
+            <div className="media-frame">
+              <img src={asset('images/bible-light.jpg')} alt="An open Bible illuminated by morning sunlight" loading="lazy" />
             </div>
-            <h2 className="section-title">A Welcoming Place to Learn Scripture</h2>
-            <p className="section-subtitle">
-              Whether you are opening the Bible for the very first time or seeking deeper theological clarity, our interactive classes are designed for you.
-            </p>
-          </div>
-
-          <div className="benefits-grid">
-            <div className="benefit-card">
-              <div className="benefit-icon-wrapper">
-                <BookOpen size={26} />
+            <div className="media-badge">
+              <LogoMark size={40} />
+              <div>
+                <strong>Guided by Scripture</strong>
+                <span>Old & New Testaments</span>
               </div>
-              <h3 className="benefit-title">Explore Scripture Together</h3>
-              <p className="benefit-text">
-                Read verse by verse in historical and spiritual context, discovering God's timeless promises for your everyday life and challenges.
-              </p>
             </div>
-
-            <div className="benefit-card">
-              <div className="benefit-icon-wrapper">
-                <Sparkles size={26} />
-              </div>
-              <h3 className="benefit-title">Understand Core Teachings</h3>
-              <p className="benefit-text">
-                Gain crystal clarity on essential Christian doctrines: the Gospel of grace, faith, prayer, forgiveness, and biblical prophecy.
-              </p>
-            </div>
-
-            <div className="benefit-card">
-              <div className="benefit-icon-wrapper">
-                <HelpCircle size={26} />
-              </div>
-              <h3 className="benefit-title">Ask Questions Freely</h3>
-              <p className="benefit-text">
-                Every question is respected. We foster a safe, warm environment where honest spiritual questions and doubts are addressed directly from the Word.
-              </p>
-            </div>
-
-            <div className="benefit-card">
-              <div className="benefit-icon-wrapper">
-                <Users size={26} />
-              </div>
-              <h3 className="benefit-title">Connect with Believers</h3>
-              <p className="benefit-text">
-                Build uplifting friendships with brothers and sisters across North America and beyond who encourage one another in prayer and love.
-              </p>
-            </div>
-          </div>
+          </Reveal>
+          <Reveal delay={120} className="split__text">
+            <span className="eyebrow">Who We Are</span>
+            <h2>A Church Founded on the Words of Christ</h2>
+            <p className="lead">{WELCOME_INTRO[0]}</p>
+            <p>{WELCOME_INTRO[1]} {WELCOME_INTRO[2]}</p>
+            <a href="#about" className="btn btn-navy">
+              About Our Church <ArrowRight size={18} />
+            </a>
+          </Reveal>
         </div>
       </section>
 
-      {/* FEATURED TOPICS PREVIEW */}
-      <section className="featured-topics-section">
+      {/* ================= MISSION ================= */}
+      <section className="section section--navy">
+        <div className="section--navy__glow" />
         <div className="container">
-          <div className="topics-header-row">
-            <div>
-              <div className="badge-pill gold-pill">
-                <BookOpen size={14} />
-                <span>Biblical Insights</span>
-              </div>
-              <h2 className="section-title">Explore Featured Bible Topics</h2>
-              <p className="section-subtitle">
-                Read our foundational articles on prayer, Christian living, prophecy, and understanding Scripture.
-              </p>
-            </div>
-
-            <button 
-              onClick={() => navigateTo('topics')}
-              className="view-all-topics-btn"
-            >
-              <span>View All Topics</span>
-              <ArrowRight size={16} />
-            </button>
-          </div>
-
-          <div className="topics-cards-grid">
-            {featuredTopics.map((topic) => (
-              <div 
-                key={topic.id}
-                className="topic-card"
-                onClick={() => onSelectArticle(topic)}
-              >
-                <div className="topic-card-image-box">
-                  <img src={topic.image} alt={topic.title} />
-                  <span className="topic-category-tag">{topic.categoryName}</span>
-                </div>
-                <div className="topic-card-body">
-                  <div className="topic-card-meta">
-                    <span className="topic-read-time">
-                      <Clock size={13} />
-                      {topic.readTime}
-                    </span>
-                    <span className="dot-sep">·</span>
-                    <span className="topic-date">{topic.date}</span>
-                  </div>
-
-                  <h3 className="topic-card-title">{topic.title}</h3>
-                  <p className="topic-card-summary">{topic.summary}</p>
-
-                  <div className="topic-card-footer">
-                    <span className="read-more-text">Read Article</span>
-                    <ArrowRight size={14} className="read-more-arrow" />
-                  </div>
-                </div>
-              </div>
+          <SectionHeading light eyebrow="Our Mission" title="Why We Exist" intro="Rooted in our bylaws, these four aims shape everything we do as a church." />
+          <div className="aims-grid">
+            {AIMS.map((a, i) => (
+              <Reveal key={a.no} delay={i * 100} className="aim-card">
+                <div className="aim-card__icon"><Icon name={a.icon} size={26} /></div>
+                <h3>{a.title}</h3>
+                <p>{a.summary}</p>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS SECTION */}
-      <section className="how-it-works-section">
+      {/* ================= BELIEFS ================= */}
+      <section className="section">
         <div className="container">
-          <div className="how-it-works-card">
-            <div className="section-head text-center">
-              <div className="badge-pill sage-pill">
-                <Calendar size={14} />
-                <span>Simple 3-Step Process</span>
-              </div>
-              <h2 className="section-title">How Free Online Bible Study Works</h2>
-              <p className="section-subtitle">
-                Joining takes less than a minute. Here is what to expect after you submit your free registration.
-              </p>
+          <SectionHeading eyebrow="What We Believe" title="Our Foundation of Faith" intro="Five convictions, each grounded in the Word of God." />
+          <div className="belief-list">
+            {BELIEFS.map((b, i) => (
+              <Reveal key={b.no} delay={i * 80} className="belief-row">
+                <span className="belief-row__no">{String(i + 1).padStart(2, '0')}</span>
+                <div className="belief-row__icon"><Icon name={b.icon} size={22} /></div>
+                <div className="belief-row__text">
+                  <h3>{b.title}</h3>
+                  <p className="belief-row__verse">{b.verse} <cite>{b.ref}</cite></p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+          <Reveal className="center-row">
+            <a href="#beliefs" className="btn btn-outline">Read Our Full Statement of Beliefs <ArrowRight size={18} /></a>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ================= BIBLE STUDY ================= */}
+      <section className="section section--ivory">
+        <div className="container split split--reverse">
+          <Reveal className="split__media">
+            <div className="media-frame media-frame--tilt">
+              <img src={asset('images/fellowship.jpg')} alt="Friends studying the Bible together" loading="lazy" />
             </div>
-
-            <div className="steps-grid">
-              <div className="step-card">
-                <div className="step-number">1</div>
-                <h4>Complete Free Registration</h4>
-                <p>Fill out the quick 60-second form with your name and preferred study time. No credit card or fee ever required.</p>
-              </div>
-
-              <div className="step-card">
-                <div className="step-number">2</div>
-                <h4>Receive Your Meeting Link</h4>
-                <p>Our study coordinator connects with you via WhatsApp or Email to share the private Zoom link and introductory reading.</p>
-              </div>
-
-              <div className="step-card">
-                <div className="step-number">3</div>
-                <h4>Join the Live Fellowship</h4>
-                <p>Log in at your chosen time. Listen quietly or participate in discussions—whatever makes you feel most comfortable.</p>
+            <div className="media-badge media-badge--right">
+              <span className="media-badge__big">100%</span>
+              <div>
+                <strong>Free of charge</strong>
+                <span>Always, for everyone</span>
               </div>
             </div>
+          </Reveal>
+          <Reveal delay={120} className="split__text">
+            <span className="eyebrow">Grow in God’s Word</span>
+            <h2>Join a Free Online Bible Study</h2>
+            <p className="lead">Explore God’s Word, ask honest questions, and grow in faith together with believers — from wherever you are.</p>
+            <ol className="steps">
+              <li><span>1</span><div><strong>Register in one minute</strong><p>Tell us your preferred time and topics.</p></div></li>
+              <li><span>2</span><div><strong>Receive your invitation</strong><p>We’ll reach out by your chosen method.</p></div></li>
+              <li><span>3</span><div><strong>Study together online</strong><p>Gather around God’s Word in a warm, welcoming group.</p></div></li>
+            </ol>
+            <a href="#bible-study" className="btn btn-gold">Reserve Your Spot <ArrowRight size={18} /></a>
+          </Reveal>
+        </div>
+      </section>
 
-            <div className="how-cta-center">
-              <button 
-                onClick={() => navigateTo('register')}
-                className="btn-large-cta"
-              >
-                <span>Reserve Your Free Spot Now</span>
-                <ArrowRight size={18} />
-              </button>
-            </div>
+      {/* ================= RETURN OF CHRIST ================= */}
+      <section className="feature-banner">
+        <div className="feature-banner__bg" style={{ backgroundImage: `url(${asset('images/light-clouds.jpg')})` }} />
+        <div className="feature-banner__overlay" />
+        <div className="container feature-banner__inner">
+          <Reveal>
+            <span className="eyebrow eyebrow--gold">The Return of Christ</span>
+            <h2>Are You Ready for the Lord’s Return?</h2>
+            <blockquote>“And at midnight there was a cry made, Behold, the bridegroom comes; go you out to meet him.”</blockquote>
+            <cite>Matthew 25:6</cite>
+            <p>The Lord Jesus calls us to watch and prepare as wise virgins. Explore what Scripture teaches about His coming.</p>
+            <a href="#return" className="btn btn-gold">Explore Bible Prophecies <ArrowRight size={18} /></a>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ================= ARTICLES ================= */}
+      <section className="section">
+        <div className="container">
+          <div className="section-head-row">
+            <SectionHeading align="left" eyebrow="God’s Word" title="Reflections & Bible Teachings" />
+            <Reveal><a href="#word" className="link-arrow">View all articles <ArrowRight size={16} /></a></Reveal>
+          </div>
+          <div className="article-grid">
+            {ARTICLES.slice(0, 3).map((a, i) => (
+              <ArticleCard key={a.slug} article={a} delay={i * 100} />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* PARTICIPANT TESTIMONIALS */}
-      <section className="testimonials-section">
+      {/* ================= TOGETHER / GOSPEL ================= */}
+      <section className="section section--sage">
         <div className="container">
-          <div className="section-head text-center">
-            <h2 className="section-title">What Participants Say</h2>
-            <p className="section-subtitle">Real experiences from believers who joined our online fellowship.</p>
-          </div>
-
-          <div className="testimonials-grid">
-            <div className="testimonial-card">
-              <Quote size={28} className="quote-mark" />
-              <p className="testimonial-text">
-                "I was intimidated to read the Bible on my own. This online group explained the historical background so simply, and everyone was so patient with my beginner questions."
-              </p>
-              <div className="testimonial-author">
-                <div className="author-avatar">EM</div>
-                <div>
-                  <strong>Emily M.</strong>
-                  <span>Toronto, Canada</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="testimonial-card">
-              <Quote size={28} className="quote-mark" />
-              <p className="testimonial-text">
-                "Between long work hours and family, attending in-person classes was tough. Having weekly live Zoom sessions with passionate teachers has revived my spiritual walk."
-              </p>
-              <div className="testimonial-author">
-                <div className="author-avatar">JW</div>
-                <div>
-                  <strong>James W.</strong>
-                  <span>Dallas, Texas</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="testimonial-card">
-              <Quote size={28} className="quote-mark" />
-              <p className="testimonial-text">
-                "What I appreciate most is the focus purely on Scripture. There is no commercial agenda or pressure—just sincere prayer, Bible reading, and genuine Christian love."
-              </p>
-              <div className="testimonial-author">
-                <div className="author-avatar">CL</div>
-                <div>
-                  <strong>Carla L.</strong>
-                  <span>Montreal, Canada</span>
-                </div>
-              </div>
-            </div>
+          <SectionHeading eyebrow="Walk in Faith Together" title="Life in Our Church" intro="Worship, fellowship, and sharing the gospel — all freely offered." />
+          <div className="activity-grid">
+            {ACTIVITIES.map((a, i) => (
+              <Reveal key={a.title} delay={i * 100} className="activity-card">
+                <Icon name={a.icon} size={30} />
+                <h3>{a.title}</h3>
+                <p>{a.text}</p>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* BOTTOM CTA BANNER */}
-      <section className="bottom-cta-banner">
-        <div className="container">
-          <div className="cta-banner-box">
-            <div className="cta-banner-text">
-              <h2>Ready to Discover God's Word?</h2>
-              <p>
-                Take the next step in your faith journey today. All classes are 100% free, held live online, and open to all.
-              </p>
-            </div>
-            <div className="cta-banner-buttons">
-              <button 
-                onClick={() => navigateTo('register')}
-                className="btn-banner-primary"
-              >
-                <span>Join Free Bible Study</span>
-                <ArrowRight size={18} />
-              </button>
-              <a 
-                href="https://wa.me/14155550199?text=Hello!%20I'm%20interested%20in%20joining%20your%20free%20online%20Bible%20study.%20Could%20you%20please%20share%20more%20information?"
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="btn-banner-whatsapp"
-              >
-                <MessageCircle size={18} />
-                <span>Chat on WhatsApp</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CtaBand />
     </div>
   );
 }

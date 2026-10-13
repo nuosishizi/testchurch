@@ -1,136 +1,68 @@
-import React, { useState } from 'react';
-import { BookOpen, Menu, X, Shield, MessageCircle, ArrowRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Menu, X, ArrowRight } from 'lucide-react';
+import { Logo } from './ui';
+import { NAV_LINKS } from '../data/church';
 
-export default function Navbar({ currentRoute, navigateTo }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+export default function Navbar({ currentRoute, transparentTop }) {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  const navItems = [
-    { label: 'Home', route: 'home' },
-    { label: 'Free Bible Study', route: 'register', badge: '100% Free' },
-    { label: 'Bible Topics', route: 'topics' },
-    { label: 'About Us', route: 'about' },
-    { label: 'Contact', route: 'contact' },
-  ];
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
-  const handleNav = (route) => {
-    navigateTo(route);
-    setMobileMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const [menuRoute, setMenuRoute] = useState(currentRoute);
+  if (menuRoute !== currentRoute) {
+    // Route changed: close the mobile menu (React's recommended "adjust state during render" pattern).
+    setMenuRoute(currentRoute);
+    setOpen(false);
+  }
+
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+  }, [open]);
+
+  const solid = scrolled || !transparentTop || open;
+  const isActive = (route) => currentRoute === route || (route === 'word' && currentRoute === 'article');
 
   return (
-    <header className="navbar-wrapper">
-      {/* Top Notification Bar */}
-      <div className="top-banner">
-        <div className="container top-banner-content">
-          <div className="banner-left">
-            <span className="live-pulse"></span>
-            <span>Live Zoom Bible Studies Weekly · Free to Join · Everyone Welcome</span>
-          </div>
-          <div className="banner-right">
-            <a 
-              href="https://wa.me/14155550199?text=Hello!%20I%20am%20interested%20in%20joining%20the%20free%20online%20Bible%20study." 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="top-whatsapp-link"
-            >
-              <MessageCircle size={14} />
-              <span>WhatsApp Direct Help</span>
+    <header className={`navbar ${solid ? 'navbar--solid' : ''}`}>
+      <div className="container navbar__inner">
+        <Logo light />
+
+        <nav className="navbar__links" aria-label="Main navigation">
+          {NAV_LINKS.map((l) => (
+            <a key={l.route} id={`nav-${l.route}`} href={`#${l.route}`} className={`navbar__link ${isActive(l.route) ? 'is-active' : ''}`}>
+              {l.label}
             </a>
-            <button 
-              onClick={() => handleNav('admin')}
-              className={`staff-portal-btn ${currentRoute === 'admin' ? 'active' : ''}`}
-              title="Staff Lead Management & CRM"
-            >
-              <Shield size={13} />
-              <span>Staff Portal</span>
-            </button>
-          </div>
-        </div>
+          ))}
+        </nav>
+
+        <a href="#bible-study" id="nav-cta" className="btn btn-gold btn-sm navbar__cta">
+          Free Bible Study <ArrowRight size={16} />
+        </a>
+
+        <button id="nav-toggle" className="navbar__toggle" onClick={() => setOpen((o) => !o)} aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open}>
+          {open ? <X size={26} /> : <Menu size={26} />}
+        </button>
       </div>
 
-      {/* Main Navigation Bar */}
-      <nav className="main-nav">
-        <div className="container nav-container">
-          {/* Brand Logo */}
-          <div className="brand-logo" onClick={() => handleNav('home')}>
-            <div className="logo-icon-box">
-              <BookOpen size={24} className="logo-icon" />
-            </div>
-            <div className="logo-text-box">
-              <span className="brand-title">Grace & Truth</span>
-              <span className="brand-sub">Online Bible Study</span>
-            </div>
-          </div>
-
-          {/* Desktop Navigation Links */}
-          <div className="desktop-nav-links">
-            {navItems.map((item) => (
-              <button
-                key={item.route}
-                onClick={() => handleNav(item.route)}
-                className={`nav-link ${currentRoute === item.route ? 'active' : ''}`}
-              >
-                {item.label}
-                {item.badge && <span className="nav-badge">{item.badge}</span>}
-              </button>
-            ))}
-          </div>
-
-          {/* CTA Action */}
-          <div className="nav-actions">
-            <button
-              onClick={() => handleNav('register')}
-              className="btn-primary-nav"
-            >
-              <span>Join Free Study</span>
-              <ArrowRight size={16} />
-            </button>
-
-            {/* Mobile Hamburger Toggle */}
-            <button
-              className="mobile-toggle"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle navigation menu"
-            >
-              {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="mobile-drawer">
-          <div className="mobile-drawer-content">
-            {navItems.map((item) => (
-              <button
-                key={item.route}
-                onClick={() => handleNav(item.route)}
-                className={`mobile-nav-link ${currentRoute === item.route ? 'active' : ''}`}
-              >
-                <span>{item.label}</span>
-                {item.badge && <span className="nav-badge">{item.badge}</span>}
-              </button>
-            ))}
-            <div className="mobile-drawer-footer">
-              <button
-                onClick={() => handleNav('register')}
-                className="btn-primary-mobile"
-              >
-                Join Free Bible Study
-              </button>
-              <button
-                onClick={() => handleNav('admin')}
-                className="btn-secondary-mobile"
-              >
-                <Shield size={16} />
-                Staff Lead Portal
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <div className={`mobile-menu ${open ? 'is-open' : ''}`}>
+        <nav aria-label="Mobile navigation">
+          {NAV_LINKS.map((l, i) => (
+            <a key={l.route} href={`#${l.route}`} className={`mobile-menu__link ${isActive(l.route) ? 'is-active' : ''}`} style={{ transitionDelay: `${open ? 60 + i * 40 : 0}ms` }}>
+              {l.label}
+            </a>
+          ))}
+          <a href="#membership" className="mobile-menu__link">Membership</a>
+          <a href="#bible-study" className="btn btn-gold mobile-menu__cta">
+            Join a Free Bible Study <ArrowRight size={18} />
+          </a>
+        </nav>
+      </div>
     </header>
   );
 }
